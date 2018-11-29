@@ -27,203 +27,302 @@ exports.mode = "console";
 
 // prototypes the string object to have additional method calls that add terminal colors
 
-var addProperty = function (color, func) {
+var addProperty = function(color, func) {
   exports[color] = function(str) {
     return func.apply(str);
   };
-  
+
   // __defineGetter__ at the least works in more browsers
   // http://robertnyman.com/javascript/javascript-getters-setters.html
   // Object.defineProperty only works in Chrome
   String.prototype.__defineGetter__(color, func);
 };
 
-var isHeadless = (typeof module !== 'undefined');
-['bold', 'underline', 'italic', 'inverse', 'grey', 'black', 'yellow', 'red', 'green', 'blue', 'white', 'cyan', 'magenta'].forEach(function (style) {
-
-  addProperty(style, function () {
-    return isHeadless ?
-             stylize(this, style) : // for those running in node (headless environments)
-             this.replace(/( )/, '$1'); // and for those running in browsers:
-             // re: ^ you'd think 'return this' works (but doesn't) so replace coerces the string to be a real string
+var isHeadless = typeof module !== "undefined";
+[
+  "bold",
+  "underline",
+  "italic",
+  "inverse",
+  "grey",
+  "black",
+  "yellow",
+  "red",
+  "green",
+  "blue",
+  "white",
+  "cyan",
+  "magenta"
+].forEach(function(style) {
+  addProperty(style, function() {
+    return isHeadless
+      ? stylize(this, style) // for those running in node (headless environments)
+      : this.replace(/( )/, "$1"); // and for those running in browsers:
+    // re: ^ you'd think 'return this' works (but doesn't) so replace coerces the string to be a real string
   });
 });
 
 // prototypes string with method "rainbow"
 // rainbow will apply a the color spectrum to a string, changing colors every letter
-addProperty('rainbow', function () {
+addProperty("rainbow", function() {
   if (!isHeadless) {
-    return this.replace(/( )/, '$1');
+    return this.replace(/( )/, "$1");
   }
-  var rainbowcolors = ['red','yellow','green','blue','magenta']; //RoY G BiV
+  var rainbowcolors = ["red", "yellow", "green", "blue", "magenta"]; //RoY G BiV
   var exploded = this.split("");
-  var i=0;
+  var i = 0;
   exploded = exploded.map(function(letter) {
-    if (letter==" ") {
+    if (letter == " ") {
       return letter;
-    }
-    else {
-      return stylize(letter,rainbowcolors[i++ % rainbowcolors.length]);
+    } else {
+      return stylize(letter, rainbowcolors[i++ % rainbowcolors.length]);
     }
   });
   return exploded.join("");
 });
 
 function stylize(str, style) {
-  if (exports.mode == 'console') {
+  if (exports.mode == "console") {
     var styles = {
       //styles
-      'bold'      : ['\033[1m',  '\033[22m'],
-      'italic'    : ['\033[3m',  '\033[23m'],
-      'underline' : ['\033[4m',  '\033[24m'],
-      'inverse'   : ['\033[7m',  '\033[27m'],
+      bold: ["\x033[1m", "\x033[22m"],
+      italic: ["\x033[3m", "\x033[23m"],
+      underline: ["\x033[4m", "\x033[24m"],
+      inverse: ["\x033[7m", "\x033[27m"],
       //grayscale
-      'white'     : ['\033[37m', '\033[39m'],
-      'grey'      : ['\033[90m', '\033[39m'],
-      'black'     : ['\033[30m', '\033[39m'],
+      white: ["\x033[37m", "\x033[39m"],
+      grey: ["\x033[90m", "\x033[39m"],
+      black: ["\x033[30m", "\x033[39m"],
       //colors
-      'blue'      : ['\033[34m', '\033[39m'],
-      'cyan'      : ['\033[36m', '\033[39m'],
-      'green'     : ['\033[32m', '\033[39m'],
-      'magenta'   : ['\033[35m', '\033[39m'],
-      'red'       : ['\033[31m', '\033[39m'],
-      'yellow'    : ['\033[33m', '\033[39m']
+      blue: ["\x033[34m", "\x033[39m"],
+      cyan: ["\x033[36m", "\x033[39m"],
+      green: ["\x033[32m", "\x033[39m"],
+      magenta: ["\x033[35m", "\x033[39m"],
+      red: ["\x033[31m", "\x033[39m"],
+      yellow: ["\x033[33m", "\x033[39m"]
     };
-  } else if (exports.mode == 'browser') {
+  } else if (exports.mode == "browser") {
     var styles = {
       //styles
-      'bold'      : ['<b>',  '</b>'],
-      'italic'    : ['<i>',  '</i>'],
-      'underline' : ['<u>',  '</u>'],
-      'inverse'   : ['<span style="background-color:black;color:white;">',  '</span>'],
+      bold: ["<b>", "</b>"],
+      italic: ["<i>", "</i>"],
+      underline: ["<u>", "</u>"],
+      inverse: [
+        '<span style="background-color:black;color:white;">',
+        "</span>"
+      ],
       //grayscale
-      'white'     : ['<span style="color:white;">',   '</span>'],
-      'grey'      : ['<span style="color:grey;">',    '</span>'],
-      'black'     : ['<span style="color:black;">',   '</span>'],
+      white: ['<span style="color:white;">', "</span>"],
+      grey: ['<span style="color:grey;">', "</span>"],
+      black: ['<span style="color:black;">', "</span>"],
       //colors
-      'blue'      : ['<span style="color:blue;">',    '</span>'],
-      'cyan'      : ['<span style="color:cyan;">',    '</span>'],
-      'green'     : ['<span style="color:green;">',   '</span>'],
-      'magenta'   : ['<span style="color:magenta;">', '</span>'],
-      'red'       : ['<span style="color:red;">',     '</span>'],
-      'yellow'    : ['<span style="color:yellow;">',  '</span>']
+      blue: ['<span style="color:blue;">', "</span>"],
+      cyan: ['<span style="color:cyan;">', "</span>"],
+      green: ['<span style="color:green;">', "</span>"],
+      magenta: ['<span style="color:magenta;">', "</span>"],
+      red: ['<span style="color:red;">', "</span>"],
+      yellow: ['<span style="color:yellow;">', "</span>"]
     };
   } else {
     console.log('unsupported mode, try "browser" or "console"');
   }
 
   return styles[style][0] + str + styles[style][1];
-};
+}
 
 // don't summon zalgo
-addProperty('zalgo', function () {
+addProperty("zalgo", function() {
   return zalgo(this);
 });
 
 // please no
 function zalgo(text, options) {
   var soul = {
-    "up" : [
-      '̍','̎','̄','̅',
-      '̿','̑','̆','̐',
-      '͒','͗','͑','̇',
-      '̈','̊','͂','̓',
-      '̈','͊','͋','͌',
-      '̃','̂','̌','͐',
-      '̀','́','̋','̏',
-      '̒','̓','̔','̽',
-      '̉','ͣ','ͤ','ͥ',
-      'ͦ','ͧ','ͨ','ͩ',
-      'ͪ','ͫ','ͬ','ͭ',
-      'ͮ','ͯ','̾','͛',
-      '͆','̚'
+      up: [
+        "̍",
+        "̎",
+        "̄",
+        "̅",
+        "̿",
+        "̑",
+        "̆",
+        "̐",
+        "͒",
+        "͗",
+        "͑",
+        "̇",
+        "̈",
+        "̊",
+        "͂",
+        "̓",
+        "̈",
+        "͊",
+        "͋",
+        "͌",
+        "̃",
+        "̂",
+        "̌",
+        "͐",
+        "̀",
+        "́",
+        "̋",
+        "̏",
+        "̒",
+        "̓",
+        "̔",
+        "̽",
+        "̉",
+        "ͣ",
+        "ͤ",
+        "ͥ",
+        "ͦ",
+        "ͧ",
+        "ͨ",
+        "ͩ",
+        "ͪ",
+        "ͫ",
+        "ͬ",
+        "ͭ",
+        "ͮ",
+        "ͯ",
+        "̾",
+        "͛",
+        "͆",
+        "̚"
       ],
-    "down" : [
-      '̖','̗','̘','̙',
-      '̜','̝','̞','̟',
-      '̠','̤','̥','̦',
-      '̩','̪','̫','̬',
-      '̭','̮','̯','̰',
-      '̱','̲','̳','̹',
-      '̺','̻','̼','ͅ',
-      '͇','͈','͉','͍',
-      '͎','͓','͔','͕',
-      '͖','͙','͚','̣'
+      down: [
+        "̖",
+        "̗",
+        "̘",
+        "̙",
+        "̜",
+        "̝",
+        "̞",
+        "̟",
+        "̠",
+        "̤",
+        "̥",
+        "̦",
+        "̩",
+        "̪",
+        "̫",
+        "̬",
+        "̭",
+        "̮",
+        "̯",
+        "̰",
+        "̱",
+        "̲",
+        "̳",
+        "̹",
+        "̺",
+        "̻",
+        "̼",
+        "ͅ",
+        "͇",
+        "͈",
+        "͉",
+        "͍",
+        "͎",
+        "͓",
+        "͔",
+        "͕",
+        "͖",
+        "͙",
+        "͚",
+        "̣"
       ],
-    "mid" : [
-      '̕','̛','̀','́',
-      '͘','̡','̢','̧',
-      '̨','̴','̵','̶',
-      '͜','͝','͞',
-      '͟','͠','͢','̸',
-      '̷','͡',' ҉'
+      mid: [
+        "̕",
+        "̛",
+        "̀",
+        "́",
+        "͘",
+        "̡",
+        "̢",
+        "̧",
+        "̨",
+        "̴",
+        "̵",
+        "̶",
+        "͜",
+        "͝",
+        "͞",
+        "͟",
+        "͠",
+        "͢",
+        "̸",
+        "̷",
+        "͡",
+        " ҉"
       ]
-  },
-  all = [].concat(soul.up, soul.down, soul.mid),
-  zalgo = {};
+    },
+    all = [].concat(soul.up, soul.down, soul.mid),
+    zalgo = {};
 
   function randomNumber(range) {
-    r = Math.floor(Math.random()*range);
+    r = Math.floor(Math.random() * range);
     return r;
-  };
+  }
 
   function is_char(character) {
     var bool = false;
-    all.filter(function(i){
-     bool = (i == character);
+    all.filter(function(i) {
+      bool = i == character;
     });
     return bool;
   }
 
-  function heComes(text, options){
-      result = '';
-      options = options || {};
-      options["up"] = options["up"] || true;
-      options["mid"] = options["mid"] || true;
-      options["down"] = options["down"] || true;
-      options["size"] = options["size"] || "maxi";
-      var counts;
-      text = text.split('');
-       for(var l in text){
-         if(is_char(l)) { continue; }
-         result = result + text[l];
+  function heComes(text, options) {
+    result = "";
+    options = options || {};
+    options["up"] = options["up"] || true;
+    options["mid"] = options["mid"] || true;
+    options["down"] = options["down"] || true;
+    options["size"] = options["size"] || "maxi";
+    var counts;
+    text = text.split("");
+    for (var l in text) {
+      if (is_char(l)) {
+        continue;
+      }
+      result = result + text[l];
 
-        counts = {"up" : 0, "down" : 0, "mid" : 0};
+      counts = { up: 0, down: 0, mid: 0 };
 
-        switch(options.size) {
-          case 'mini':
-            counts.up = randomNumber(8);
-            counts.min= randomNumber(2);
-            counts.down = randomNumber(8);
+      switch (options.size) {
+        case "mini":
+          counts.up = randomNumber(8);
+          counts.min = randomNumber(2);
+          counts.down = randomNumber(8);
           break;
-          case 'maxi':
-            counts.up = randomNumber(16) + 3;
-            counts.min = randomNumber(4) + 1;
-            counts.down = randomNumber(64) + 3;
+        case "maxi":
+          counts.up = randomNumber(16) + 3;
+          counts.min = randomNumber(4) + 1;
+          counts.down = randomNumber(64) + 3;
           break;
-          default:
-            counts.up = randomNumber(8) + 1;
-            counts.mid = randomNumber(6) / 2;
-            counts.down= randomNumber(8) + 1;
+        default:
+          counts.up = randomNumber(8) + 1;
+          counts.mid = randomNumber(6) / 2;
+          counts.down = randomNumber(8) + 1;
           break;
-        }
+      }
 
-        var arr = ["up", "mid", "down"];
-        for(var d in arr){
-          var index = arr[d];
-          for (var i = 0 ; i <= counts[index]; i++)
-          {
-            if(options[index]) {
-                result = result + soul[index][randomNumber(soul[index].length)];
-              }
-            }
+      var arr = ["up", "mid", "down"];
+      for (var d in arr) {
+        var index = arr[d];
+        for (var i = 0; i <= counts[index]; i++) {
+          if (options[index]) {
+            result = result + soul[index][randomNumber(soul[index].length)];
           }
         }
-      return result;
-  };
+      }
+    }
+    return result;
+  }
   return heComes(text);
 }
 
-addProperty('stripColors', function() {
-  return ("" + this).replace(/\u001b\[\d+m/g,'');
+addProperty("stripColors", function() {
+  return ("" + this).replace(/\u001b\[\d+m/g, "");
 });
