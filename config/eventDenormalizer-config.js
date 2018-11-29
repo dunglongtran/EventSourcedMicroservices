@@ -1,27 +1,27 @@
-const commonConfig = require('./common-config');
+const commonConfig = require("./common-config");
 
 module.exports = {
-    repository: {
-        type: 'mongodb',
-        host: 'localhost',                          // optional
-        port: 27017,                                // optional
-        dbName: 'readmodel',                        // optional
-        timeout: 10000                              // optional
-      // authSource: 'authedicationDatabase',        // optional
-        // username: 'technicalDbUser',                // optional
-        // password: 'secret'                          // optional
-    },
-    revisionGuardStore: {
-        queueTimeout: 1000,                         // optional, timeout for non-handled events in the internal in-memory queue
-        queueTimeoutMaxLoops: 3,                     // optional, maximal loop count for non-handled event in the internal in-memory queue
+  repository: {
+    type: "mongodb",
+    host: "ds127428.mlab.com", // optional
+    port: 27428, // optional
+    dbName: "readmodel", // optional
+    timeout: 10000, // optional
+    // authSource: 'authedicationDatabase',        // optional
+    username: "test_user", // optional
+    password: "password123" // optional
+  },
+  revisionGuardStore: {
+    queueTimeout: 1000, // optional, timeout for non-handled events in the internal in-memory queue
+    queueTimeoutMaxLoops: 3, // optional, maximal loop count for non-handled event in the internal in-memory queue
 
-        type: 'redis',
-        host: 'localhost',                          // optional
-        port: 6379,                                 // optional
-        db: 0,                                      // optional
-        prefix: 'readmodel_revision',               // optional
-        timeout: 10000,                              // optional
-        password: 'ztEB@DSWP^3P5Zt'                 // optional
-    },
-    eventDefinition : commonConfig.eventDefinition
-}
+    type: "redis",
+    host: "redis-17613.c114.us-east-1-4.ec2.cloud.redislabs.com", // optional
+    port: 17613, // optional
+    db: 0, // optional
+    prefix: "readmodel_revision", // optional
+    timeout: 10000, // optional
+    password: "TqwvBL2ubDjOFriogGQbBDCHbNdUnqR7@DSWP^3P5Zt" // optional
+  },
+  eventDefinition: commonConfig.eventDefinition
+};
