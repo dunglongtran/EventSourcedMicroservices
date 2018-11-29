@@ -20,7 +20,8 @@ log4js.configure({
         {
             type: 'log4js-node-mongodb',
             connectionString: 'mongodb://test_user:password123@ds121624.mlab.com:21624/logs',
-            category: 'host'
+            category: 'host',
+            useNewUrlParser: true
         }
     ]
 });

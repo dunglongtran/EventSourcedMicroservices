@@ -17,7 +17,8 @@ log4js.configure({
       type: "log4js-node-mongodb",
       connectionString:
         "mongodb://test_user:password123@ds121624.mlab.com:21624/logs",
-      category: "saga-category"
+      category: "saga-category",
+	    useNewUrlParser: true
     }
   ]
 });
@@ -29,8 +30,8 @@ const saga = require("cqrs-saga")({
   sagaPath: __dirname + "/sagas",
   sagaStore: {
     type: "mongodb",
-    host: "localhost", // optional
-    port: 27017, // optional
+    host: "ds127428.mlab.com", // optional
+    port: 27428, // optional
     dbName: "domain-saga-category", // optional
     collectionName: "sagas", // optional
     timeout: 10000, // optional

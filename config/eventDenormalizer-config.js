@@ -21,7 +21,7 @@ module.exports = {
     db: 0, // optional
     prefix: "readmodel_revision", // optional
     timeout: 10000, // optional
-    password: "TqwvBL2ubDjOFriogGQbBDCHbNdUnqR7@DSWP^3P5Zt" // optional
+    password: "TqwvBL2ubDjOFriogGQbBDCHbNdUnqR7" // optional
   },
   eventDefinition: commonConfig.eventDefinition
 };

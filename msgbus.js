@@ -1,8 +1,8 @@
 // the hub encapsulates functionality to send or receive messages from redis.
 var redisOptions = {
-    host: 'redis-17613.c114.us-east-1-4.ec2.cloud.redislabs.com',                       
+    host: 'redis-17613.c114.us-east-1-4.ec2.cloud.redislabs.com',
     port: 17613,
-    password: 'TqwvBL2ubDjOFriogGQbBDCHbNdUnqR7@DSWP^3P5Zt'
+    password: 'TqwvBL2ubDjOFriogGQbBDCHbNdUnqR7'
 }
 
 var redis = require('redis')
@@ -21,7 +21,7 @@ log4js.configure({
         },
         {
             type: 'log4js-node-mongodb',
-            connectionString: 'localhost:27017/logs',
+            connectionString: 'mongodb://test_user:password123@ds121624.mlab.com:21624/logs',
             category: 'message-bus'
         }
     ]
