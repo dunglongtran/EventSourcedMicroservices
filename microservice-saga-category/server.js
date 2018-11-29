@@ -15,7 +15,7 @@ log4js.configure({
         },
         {
             type: 'log4js-node-mongodb',
-            connectionString: 'localhost:27017/logs',
+            connectionString: 'mongodb://test_user:password123@ds121624.mlab.com:21624/logs',
             category: 'saga-category'
         }
     ]
